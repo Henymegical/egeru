@@ -1,0 +1,1255 @@
+#: import dp kivy.metrics.dp
+#: import Window kivy.core.window.Window
+#: import FadeTransition kivy.uix.screenmanager.FadeTransition
+#: import SF config.SF
+#: import BF config.BF
+#: import HP config.HP
+#: import LOWHP config.LOWHP
+#: import AutoFontLabel autofontlabel.AutoFontLabel
+#: import RNO_Screen rnologic.RNO_Screen
+#: import Add_Screen addlogic.Add_Screen
+#: import WordButtons gamelogic.WordButtons
+
+
+
+
+ScreenManager:
+    transition: FadeTransition(duration=0.2)
+    Mainmenu:
+    Playmenu:
+    Optionsmenu:
+    Ud:
+    Sl:
+    Na:
+    Pr:
+    N_:
+    Is:
+    Fo:
+
+    Add_ud:
+    Add_sl_sl:
+    Add_nar:
+    Add_iskl:
+    Add_pre_pri:
+    Add_n_nn:
+    Add_form:
+    
+    Udareniya:
+    Slovarniye:
+    Narechiya:
+    Prepri:
+    Isklyucheniya:
+    N_nn:
+    Formi:
+
+    UdDO:
+    SlDO:
+    NaDO:
+    PrDO:
+    N_DO:
+    IsDO:
+    FoDO:
+
+
+<MDScreen>:
+    canvas.before:
+        Color:
+            rgba: app.theme_cls.bg_light if app.theme_cls.theme_style == "Light" else app.theme_cls.bg_dark
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<Menubutton@MDRaisedButton>:
+    shadow_color: (1, 1, 1, 0.3) if app.theme_cls.theme_style == "Dark" else (0, 0, 0, 0.4)
+    elevation: dp(1.75)
+    font_name: SF
+    font_size: dp(25)
+
+<CustomLabel@MDLabel>:
+    font_name: SF
+    text_size: self.size
+    halign: "center"
+    valign: "middle"
+    size_hint: 0.5, 1
+
+<BSTLabel@MDBoxLayout>:
+    text_1: ""
+    text_2: ""
+    CustomLabel:
+        size_hint: 1.5, 1
+        text_size: self.size
+        halign: "left"
+        valign: "bottom"
+        text: root.text_1
+        font_size: dp(20)
+    CustomLabel:
+        text_size: self.size
+        halign: "right"
+        valign: "bottom"
+        text: root.text_2
+        font_size: dp(20)
+
+<MainLabel@MDLabel>:
+    text_size: self.size
+    valign: 'top'
+    halign: 'center'
+    font_size: dp(55)
+    font_name: BF
+
+<BarLabel@MDLabel>:
+    text_size: self.size
+    valign: 'top'
+    halign: 'center'
+    padding: 0, 10
+    font_size: dp(20)
+    font_name: SF
+
+<AnsButton@MDRaisedButton>:
+    shadow_color: (1, 1, 1, 0.3) if app.theme_cls.theme_style == "Dark" else (0, 0, 0, 0.4)
+    elevation: dp(1.75)
+    font_name: SF
+    font_size: dp(20)
+
+<GameButton@MDBoxLayout>:
+    padding: dp(10), dp(5), dp(5), dp(10)
+    sc_release: "Playmenu"
+    MDIconButton:
+        icon: "arrow-left"
+        pos_hint: {"left": 1, "bottom": 1}
+        on_release: app.root.current = root.sc_release
+    MDIconButton:
+        icon: "refresh"
+        pos_hint: {"left": 1, "bottom": 1}
+        on_release: app.restart_game()
+
+<MyBar@MDBoxLayout>:
+    score_value: 1
+    hp_value: 1
+    left_value: 1
+    all_words: 1
+    orientation: 'vertical'
+    MDBoxLayout:
+        size_hint: 0.8, 0.133
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        padding: 0, dp(5), 0, 0
+        MDProgressBar:
+            pos_hint: {'center_y': 0.5}
+            size_hint: 1, 0.25
+            max: root.all_words
+            value: root.score_value+0.0000000001
+            radius: dp(5)
+        MDLabel:
+            size_hint: None, 1
+            size: dp(10), 0
+        MDBoxLayout:
+            size_hint: 0.1, 1
+            Label:
+                markup: True
+                font_size: dp(15)
+                font_name: SF
+                text: "[color=9A9A9AFF]{}%[/color]".format(int((root.score_value / root.all_words) * 100))
+
+    MDGridLayout:
+        cols: 3
+        BarLabel:
+            text: "SCORE: " + str(int(root.score_value))
+        BarLabel:
+            text: str(root.left_value)
+        BarLabel:
+            text: "HP: " + str(root.hp_value)
+            theme_text_color: 'Error' if root.hp_value <= LOWHP else 'Primary'
+
+
+<RNO_Element>:
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(60)
+    padding: dp(10)
+    spacing: dp(15)
+    MDLabel:
+        id: lbl
+        text: root.text
+        size_hint_y: None
+        height: dp(48)
+        halign: 'left'
+        valign: 'middle'
+        font_size: dp(20)
+        font_name: SF
+    MDIconButton:
+        id: btn_act
+        icon: "eye-outline"
+        on_release: root.toggle_answer()
+    MDIconButton:
+        id: btn_del
+        icon: "delete"
+        ripple_scale: 0
+        on_release: root.remove_element()
+
+<RNO_Screen>:
+    viewclass: 'RNO_Element'
+    RecycleBoxLayout:
+        padding: dp(15), 0, dp(15), 0
+        default_size: None, dp(60)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+
+<BaseRNOScreen>:
+    name: ""
+    fp: ""
+    title: ""
+    counter: ""
+    do: ""
+    prev: ""
+    next: ""
+
+    MDBoxLayout:
+        orientation: "vertical"
+        MDIconButton:
+            icon: "arrow-left"
+            pos_hint: {"left": 1, "center_y": 0.5}
+            on_release: root.manager.current = "Playmenu"
+        MDBoxLayout:
+            size_hint: 1, None
+            height: dp(75)
+            MainLabel:
+                text: root.title
+
+        ScrollView:
+            do_scroll_x: False
+            bar_width: dp(5)
+            RNO_Screen:
+                id: rno_screen
+                file_path: root.fp
+        MDBoxLayout:
+            padding: dp(25), dp(20)
+            size_hint: 1, None
+            height: dp(85)
+            spacing: dp(10)
+            MDRectangleFlatButton:
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                width: dp(40)
+                MDIconButton:
+                    icon: "delete"
+                    ripple_scale: 0
+                    theme_icon_color: "Custom"
+                    icon_color: app.theme_cls.primary_color  
+                    on_release: root.clear_all(rno_screen)
+            MDRectangleFlatButton:
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                text: "РЕШАТЬ"
+                size_hint_x: 1
+                font_size: dp(15)
+                font_name: SF
+                on_release: root.update_do(root.do)
+                
+            MDIconButton:
+                id: btn_del
+                icon: "arrow-left"
+                on_release: root.manager.current = root.prev
+            CustomLabel:
+                text:root.counter
+                font_size: dp(20)
+            MDIconButton:
+                id: btn_del
+                icon: "arrow-right"
+                on_release: root.manager.current = root.next
+
+<Add_Screen>:
+    viewclass: 'Add_Element'
+    RecycleBoxLayout:
+        padding: dp(15), 0, dp(15), dp(10)
+        default_size: None, dp(60)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+    
+<Add_Element>:
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(60)
+    padding: dp(10)
+    spacing: dp(15)
+    MDLabel:
+        id: lbl
+        text: root.display_text
+        size_hint_y: None
+        height: dp(45)
+        halign: 'left'
+        valign: 'middle'
+        font_size: dp(20)
+        font_name: SF
+    MDIconButton:
+        id: btn_del
+        icon: "delete"
+        ripple_scale: 0
+        on_release: root.remove_element()
+
+<BaseAdd>:
+    name: ""
+    title: ""
+    counter: ""
+    fp: ""
+    prev: ""
+    next: ""
+    title_helper: ""
+    MDBoxLayout:
+        orientation: "vertical"
+        MDIconButton:
+            icon: "arrow-left"
+            pos_hint: {"left": 1, "center_y": 0.5}
+            on_release: root.manager.current = "Playmenu"
+        MDBoxLayout:
+            size_hint: 1, None
+            height: dp(75)
+            MainLabel:
+                text: root.title
+        
+        MDTextField:
+            id: text_add
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            size_hint_x: 0.85
+            hint_text: "Введите слово строчными буквами"
+            helper_text: root.title_helper
+            icon_right_color: app.theme_cls.primary_color
+            helper_text_mode: "on_error"
+            multiline: False 
+            on_text_validate: 
+                root.enter()
+                
+ 
+        MDBoxLayout:
+            padding: 0, dp(15), 0, 0
+            ScrollView:
+                do_scroll_x: False
+                bar_width: dp(5)
+                Add_Screen:
+                    file_path: root.fp
+                    id: add_screen
+
+        MDBoxLayout:
+            padding: dp(25), dp(20)
+            size_hint: 1, None
+            height: dp(85)
+            spacing: dp(5)
+            MDRectangleFlatIconButton:
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                text: "УДАЛИТЬ ВСЁ"
+                icon: "delete"
+                size_hint_x: 1
+                font_size: dp(15)
+                font_name: SF
+                on_release: root.clear_all(add_screen)
+                
+            MDIconButton:
+                id: btn_del
+                icon: "arrow-left"
+                on_release: root.manager.current = root.prev
+            CustomLabel:
+                text:root.counter
+                font_size: dp(20)
+            MDIconButton:
+                id: btn_del
+                icon: "arrow-right"
+                on_release: root.manager.current = root.next
+#===================================================================================================
+<Mainmenu>:
+    name: "Mainmenu"
+    MDBoxLayout:
+        orientation: "vertical"
+        MDLabel:
+            size_hint: 1, None
+            height: dp(48)
+        MDBoxLayout:
+            size_hint: 1, None
+            height: dp(75)
+            MainLabel:
+                text: "EGERU"
+                height: dp(140)
+        ScrollView:
+            do_scroll_x: False
+            bar_width: dp(5)
+            MDBoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding:  dp(25), Window.height * 0.2, dp(25), dp(25)
+                spacing: dp(15)
+                Menubutton:
+                    size_hint: 1, 1
+                    text: "СТРОЧИТЬ"
+                    on_release: root.manager.current = "Playmenu"
+                Menubutton:
+                    size_hint: 1, 1
+                    text: "ЛИДЕРБОРД(soon)"
+                Menubutton:
+                    size_hint: 1, 1
+                    text: "ДОБАВИТЬ СЛОВА"
+                    on_release: root.manager.current = "Add_ud"
+                Menubutton:
+                    size_hint: 1, 1
+                    text: "НАСТРОЙКИ"
+                    on_release: root.manager.current = "Optionsmenu"
+                Menubutton:
+                    size_hint: 1, 1
+                    text: "ПРОКРАСТИНИРОВАТЬ"
+                    on_release: app.stop()
+        MDBoxLayout:
+            size_hint: 1, None
+            height: dp(75)
+            height: dp(48)
+            padding: dp(25)
+            CustomLabel:
+                font_size: dp(15)
+                text: "© Stroch Corporation"
+                halign: "left"
+                valign: "bottom"
+            CustomLabel:
+                font_size: dp(15)
+                text: "0.1 Beta"
+                halign: "right"
+                valign: "bottom"
+
+<Playmenu>:
+    name: "Playmenu"
+    MDBoxLayout:
+        orientation: "vertical"
+        MDIconButton:
+            icon: "arrow-left"
+            pos_hint: {"left": 1, "center_y": 0.5}
+            on_release: root.manager.current = "Mainmenu"
+        MDBoxLayout:
+            size_hint: 1, None
+            height: dp(75)
+            MainLabel:
+                text: "РЕЖИМЫ"
+
+        ScrollView:
+            do_scroll_x: False
+            bar_width: dp(5)
+            MDBoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(25), Window.height * 0.1, dp(25), dp(25)
+                spacing: dp(15)
+
+                Menubutton:
+                    text: "УДАРЕНИЯ"
+                    size_hint: 1, 1
+                    on_release: root.manager.current = "Udareniya"
+                Menubutton:
+                    text: "СЛОВАРНЫЕ СЛОВА"
+                    size_hint: 1, 1
+                    on_release: root.manager.current = "Slovarniye"
+                Menubutton:
+                    text: "НАРЕЧИЯ"
+                    size_hint: 1, 1
+                    on_release: root.manager.current = "Narechiya"
+                Menubutton:
+                    text: "ПРЕ/ПРИ"
+                    size_hint: 1, 1
+                    on_release: root.manager.current = "Prepri"
+                Menubutton:
+                    text: "Н/НН"
+                    size_hint: 1, 1
+                    on_release: root.manager.current = "N_nn"
+                Menubutton:
+                    text: "ИСКЛЮЧЕНИЯ"
+                    size_hint: 1, 1
+                    on_release: root.manager.current = "Isklyucheniya"
+                Menubutton:
+                    text: "ФОРМЫ СЛОВ"
+                    size_hint: 1, 1
+                    on_release: root.manager.current = "Formi"
+
+        MDBoxLayout:
+            size_hint: 1, None
+            height: dp(75)
+            spacing: dp(10)
+            padding: dp(25)
+            MDRectangleFlatIconButton:
+                text: "РНО"
+                size_hint: 0.9, None
+                on_release: root.manager.current = "Ud"
+                font_size: dp(15)
+                font_name: SF
+                icon: "list-box-outline"
+            #MDRectangleFlatIconButton:
+            #    text: "ДОП"
+            #    size_hint: None, None
+            #    font_size: dp(15)
+            #    font_name: SF
+            #    icon: "more"
+            MDBoxLayout:
+                size_hint: 1, None
+                spacing: dp(5)
+                CustomLabel:
+                    text: "Доб.сл."
+                    font_size: dp(15)
+                    halign: "center"
+                    valign: "bottom"
+                    shorten:True,  
+                    shorten_from:"right"
+                    padding: 0, 0, 0, dp(9)
+                MDAnchorLayout:
+                    padding: 0, 0, dp(25), -dp(13)
+                    size_hint_x: None
+                    width: dp(65)
+
+                    anchor_y: "bottom"
+                    anchor_x: "right"
+                    MDSwitch:
+                        id: my_switch
+                        active: app.switch_active
+                        on_active: app.switch_active = self.active
+                        size_hint_x: 1
+
+<Optionsmenu>:
+    name: "Optionsmenu"
+    MDBoxLayout:
+        orientation: "vertical"
+        MDIconButton:
+            icon: "arrow-left"
+            pos_hint: {"left": 1, "center_y": 0.5}
+            on_release: root.manager.current = "Mainmenu"
+        MDBoxLayout:
+            size_hint: 1, None
+            height: dp(50)
+            MainLabel:
+                text: "НАСТРОЙКИ"
+        MDBoxLayout:
+            size_hint: 1, None
+            height: dp(150)
+            orientation: "vertical"
+            padding: dp(25)
+            MDBoxLayout:
+                CustomLabel:
+                    font_size: dp(25)
+                    text: "HP"
+                    halign: "left"
+                    size_hint: 0.1, 1
+                MDSlider:
+                    size_hint: 0.2, 1
+                    min: 1
+                    max: 50
+                    value: app.hp_value
+                    hint: True
+                    on_value: app.schedule_update_hp_all(self.value)
+            MDBoxLayout:
+                CustomLabel:
+                    font_size: dp(25)
+                    text: "ТЕМА"
+                    halign: "left"
+                MDRectangleFlatIconButton:
+                    size_hint: 1, 0.75
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    text: "СДЕЛАТЬ ТЁМНОЙ" if app.theme_cls.theme_style == "Light" else "СДЕЛАТЬ СВЕТЛОЙ"
+                    font_size: dp(15)
+                    font_name: SF
+                    icon: "weather-night" if app.theme_cls.theme_style == "Light" else "white-balance-sunny"
+                    on_release: app.change_theme()
+        MDBoxLayout:
+            size_hint: 1, None
+            height: dp(50)
+            MainLabel:
+                text: "СТАТИСТИКА"
+        ScrollView:
+            do_scroll_x: False
+            bar_width: dp(5)
+            MDBoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                padding: dp(25), dp(5), dp(25), dp(15)
+                height: self.minimum_height
+                BSTLabel:
+                    size_hint_y: None
+                    height: dp(50)
+                    text_1: "B/S УДАРЕНИЯ:"
+                    text_2: str(app.best_udareniya)
+                BSTLabel:
+                    size_hint_y: None
+                    height: dp(50)
+                    text_1: "B/S СЛ. СЛОВА:"
+                    text_2: str(app.best_slovarniye)
+                BSTLabel:
+                    size_hint_y: None
+                    height: dp(50)
+                    text_1: "B/S НАРЕЧИЯ:"
+                    text_2: str(app.best_narechiya)
+                BSTLabel:
+                    size_hint_y: None
+                    height: dp(50)
+                    text_1: "B/S ПРИ/ПРИ:"
+                    text_2: str(app.best_prepri)
+                BSTLabel:
+                    size_hint_y: None
+                    height: dp(50)
+                    text_1: "B/S Н/НН:"
+                    text_2: str(app.best_n_nn)
+                BSTLabel:
+                    size_hint_y: None
+                    height: dp(50)
+                    text_1: "B/S ИСКЛ:"
+                    text_2: str(app.best_isklyucheniya)
+                BSTLabel:
+                    size_hint_y: None
+                    height: dp(50)
+                    text_1: "B/S ФОРМЫ СЛ:"
+                    text_2: str(app.best_formi)
+                BSTLabel:
+                    size_hint_y: None
+                    height: dp(50)
+                    text_1: "ОШИБКИ:"
+                    text_2: str(app.total_errors)
+                BSTLabel:
+                    size_hint_y: None
+                    height: dp(50)
+                    text_1: "РЕШЕНО ПРАВИЛЬНО:"
+                    text_2: str(app.total_solved)
+
+
+<Ud>:
+    name: "Ud"
+    fp: "rnotxt/Ud.txt" 
+    title: "УДАРЕНИЯ"
+    counter: "1/7"
+    do: 'UdDO'
+    prev: "Fo"
+    next: "Sl"
+<Sl>:
+    name: "Sl"
+    fp: "rnotxt/Sl.txt" 
+    title: "СЛ. СЛОВА"
+    counter: "2/7"
+    do: 'SlDO'
+    prev: "Ud"
+    next: "Na"
+<Na>:
+    name: "Na"
+    fp: "rnotxt/Na.txt" 
+    title: "НАРЕЧИЯ"
+    counter: "3/7"
+    do: 'NaDO'
+    prev: "Sl"
+    next: "Pr"
+<Pr>:
+    name: "Pr"
+    fp: "rnotxt/Pr.txt" 
+    title: "ПРЕ/ПРИ"
+    counter: "4/7"
+    do: 'PrDO'
+    prev: "Na"
+    next: "N_"
+<N_>:
+    name: "N_"
+    fp: "rnotxt/N_.txt" 
+    title: "Н/НН"
+    counter: "5/7"
+    do: 'N_DO'
+    prev: "Pr"
+    next: "Is"
+<Is>:
+    name: "Is"
+    fp: "rnotxt/Is.txt" 
+    title: "ИСКЛЮЧЕНИЯ"
+    counter: "6/7"
+    do: 'IsDO'
+    prev: "N_"
+    next: "Fo"
+<Fo>:
+    name: "Fo"
+    fp: "rnotxt/Fo.txt" 
+    title: "ФОРМЫ СЛ."
+    counter: "7/7"
+    do: 'FoDO'
+    prev: "Is"
+    next: "Ud"
+                    
+
+<Udareniya>:
+    name: "Udareniya"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            WordButtons:
+                id: word_buttons
+                dataset: root.dataset
+                on_update_hud: root.update_hud(*args)
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+        GameButton:
+
+<Slovarniye>:
+    name: "Slovarniye"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+            MDGridLayout:
+                cols: 5
+                rows: 2
+                spacing: dp(5)
+                AnsButton:
+                    elevation: dp(1)
+                    text: "А"
+                    size_hint: 1, 1
+                    on_release: root.logic("а")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Е"
+                    size_hint: 1, 1
+                    on_release: root.logic("е")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Я"
+                    size_hint: 1, 1
+                    on_release: root.logic("я")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Э"
+                    size_hint: 1, 1
+                    on_release: root.logic("э")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Ё"
+                    size_hint: 1, 1
+                    on_release: root.logic("ё")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "О"
+                    size_hint: 1, 1
+                    on_release: root.logic("о")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "И"
+                    size_hint: 1, 1
+                    on_release: root.logic("и")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Ю"
+                    size_hint: 1, 1
+                    on_release: root.logic("ю")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "У"
+                    size_hint: 1, 1
+                    on_release: root.logic("у")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Ы"
+                    size_hint: 1, 1
+                    on_release: root.logic("ы")
+        GameButton:
+
+<Narechiya>:
+    name: "Narechiya"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+            MDGridLayout:
+                cols: 2
+                size_hint: 1, 0.66
+                spacing: dp(15)
+                AnsButton:
+                    text: "СЛИТНО"
+                    size_hint: 1, 1
+                    on_release: root.logic('0')
+                AnsButton:
+                    text: "РАЗДЕЛЬНО"
+                    size_hint: 1, 1
+                    on_release: root.logic('1')
+        GameButton:
+
+<Prepri>:
+    name: "Prepri"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+            MDGridLayout:
+                cols: 2
+                size_hint: 1, 0.66
+                spacing: dp(15)
+                AnsButton:
+                    text: "ПРЕ"
+                    size_hint: 1, 1
+                    on_release: root.logic("е")
+                AnsButton:
+                    text: "ПРИ"
+                    size_hint: 1, 1
+                    on_release: root.logic("и")
+        GameButton:
+
+<N_nn>:
+    name: "N_nn"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+            MDGridLayout:
+                cols: 2
+                size_hint: 1, 0.66
+                spacing: dp(15)
+                AnsButton:
+                    text: "Н"
+                    size_hint: 1, 1
+                    on_release: root.logic("Н")
+                AnsButton:
+                    text: "НН"
+                    size_hint: 1, 1
+                    on_release: root.logic("НН")
+        GameButton:
+
+<Isklyucheniya>:
+    name: "Isklyucheniya"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+        TextInput:
+            id: hidden_input
+            opacity: 0
+            size_hint_y: None
+            height: 0
+            multiline: False
+            on_text:
+                if self.text: root.logic(self.text[-1].upper()); self.text = ""
+        GameButton:
+            AnchorLayout:
+                anchor_x: "right"
+                anchor_y: "bottom"
+                MDIconButton:
+                    icon: "keyboard"
+                    on_release: root.ids.hidden_input.focus = True
+
+<Formi>:
+    name: "Formi"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+            MDGridLayout:
+                cols: 2
+                size_hint: 1, 0.66
+                spacing: dp(15)
+                AnsButton:
+                    text: "Верно"
+                    size_hint: 1, 1
+                    on_release: root.logic('True')
+                AnsButton:
+                    text: "Неверно"
+                    size_hint: 1, 1
+                    on_release: root.logic('False')
+        GameButton:
+
+<UdDO>:
+    name: "UdDO"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            WordButtons:
+                id: word_buttons
+                dataset: root.dataset
+                on_update_hud: root.update_hud(*args)
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+        GameButton:
+            sc_release: "Ud"
+<SlDO>:
+    name: "SlDO"
+    
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+            MDGridLayout:
+                cols: 5
+                rows: 2
+                spacing: dp(5)
+                AnsButton:
+                    elevation: dp(1)
+                    text: "А"
+                    size_hint: 1, 1
+                    on_release: root.logic("а")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Е"
+                    size_hint: 1, 1
+                    on_release: root.logic("е")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Я"
+                    size_hint: 1, 1
+                    on_release: root.logic("я")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Э"
+                    size_hint: 1, 1
+                    on_release: root.logic("э")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Ё"
+                    size_hint: 1, 1
+                    on_release: root.logic("ё")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "О"
+                    size_hint: 1, 1
+                    on_release: root.logic("о")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "И"
+                    size_hint: 1, 1
+                    on_release: root.logic("и")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Ю"
+                    size_hint: 1, 1
+                    on_release: root.logic("ю")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "У"
+                    size_hint: 1, 1
+                    on_release: root.logic("у")
+                AnsButton:
+                    elevation: dp(1)
+                    text: "Ы"
+                    size_hint: 1, 1
+                    on_release: root.logic("ы")
+        GameButton:
+            sc_release: "Sl"
+
+<NaDO>:
+    name: "NaDO"
+
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+            MDGridLayout:
+                cols: 2
+                spacing: dp(15)
+                AnsButton:
+                    text: "СЛИТНО"
+                    size_hint: 1, 1
+                    on_release: root.logic(0)
+                AnsButton:
+                    text: "РАЗДЕЛЬНО"
+                    size_hint: 1, 1
+                    on_release: root.logic(1)
+        GameButton:
+            sc_release: "Na"
+
+<PrDO>:
+    name: "PrDO"
+
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+            MDGridLayout:
+                cols: 2
+                spacing: dp(15)
+                AnsButton:
+                    text: "ПРЕ"
+                    size_hint: 1, 1
+                    on_release: root.logic("е")
+                AnsButton:
+                    text: "ПРИ"
+                    size_hint: 1, 1
+                    on_release: root.logic("и")
+        GameButton:
+            sc_release: "Pr"
+
+<N_DO>:
+    name: "N_DO"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+            MDGridLayout:
+                cols: 2
+                spacing: dp(15)
+                AnsButton:
+                    text: "Н"
+                    size_hint: 1, 1
+                    on_release: root.logic("Н")
+                AnsButton:
+                    text: "НН"
+                    size_hint: 1, 1
+                    on_release: root.logic("НН")
+        GameButton:
+            sc_release: "N_"
+
+<IsDO>:
+    name: "IsDO"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+        TextInput:
+            id: hidden_input
+            opacity: 0
+            size_hint_y: None
+            height: 0
+            multiline: False
+            on_text:
+                if self.text: root.logic(self.text[-1].upper()); self.text = ""
+        GameButton:
+            sc_release: "Is"
+            AnchorLayout:
+                anchor_x: "right"
+                anchor_y: "bottom"
+                MDIconButton:
+                    icon: "keyboard"
+                    on_release: root.ids.hidden_input.focus = True
+
+<FoDO>:
+    name: "FoDO"
+    MDBoxLayout:
+        orientation: "vertical"
+        MyBar:
+            all_words: root.all_words
+            score_value: root.score_value
+            left_value: root.left_value
+            hp_value: root.hp_value
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: self.width * 0.05, 0
+            AutoFontLabel:
+                text: root.question_text
+            AutoFontLabel:
+                center_text: False
+                max_font_size: dp(30)
+                text: root.result_text
+            MDGridLayout:
+                cols: 2
+                size_hint: 1, 0.66
+                spacing: dp(15)
+                AnsButton:
+                    text: "Верно"
+                    size_hint: 1, 1
+                    on_release: root.logic('True')
+                AnsButton:
+                    text: "Неверно"
+                    size_hint: 1, 1
+                    on_release: root.logic('False')
+        GameButton:
+            sc_release: "Fo"
+
+<Add_ud>:
+    name: "Add_ud"
+    title: "УДАРЕНИЯ"
+    counter: "1/7"
+    fp: "addtxt/Add_ud.txt"
+    prev: "Add_form"
+    next: "Add_sl_sl"
+    title_helper: "сделайте заглавной ударную букву"
+    
+<Add_sl_sl>:
+    name: "Add_sl_sl"
+    title: "СЛ. СЛОВА"
+    counter: "2/7"
+    fp: "addtxt/Add_sl_sl.txt"
+    prev: "Add_ud"
+    next: "Add_nar"
+    title_helper: "просто введите слово"
+
+<Add_nar>:
+    name: "Add_nar"
+    title: "НАРЕЧИЯ"
+    counter: "3/7"
+    fp: "addtxt/Add_nar.txt"
+    prev: "Add_sl_sl"
+    next: "Add_pre_pri"
+    title_helper: "слитное написание - «/», раздельное - «_»"
+
+
+<Add_pre_pri>:
+    name: "Add_pre_pri"
+    title: "ПРЕ/ПРИ"
+    counter: "4/7"
+    fp: "addtxt/Add_pre_pri.txt"
+    prev: "Add_nar"
+    next: "Add_n_nn"
+    title_helper: "F = ma – ist die beste Formel aller Zeiten"
+
+<Add_n_nn>:
+    name: "Add_n_nn"
+    title: "Н/НН"
+    counter: "5/7"
+    fp: "addtxt/Add_n_nn.txt"
+    prev: "Add_pre_pri"
+    next: "Add_iskl"
+    title_helper: "сделайте заглавными «НН» или «Н»"
+<Add_iskl>:
+    name: "Add_iskl"
+    title: "ИСКЛЮЧЕНИЯ"
+    counter: "6/7"
+    fp: "addtxt/Add_iskl.txt"
+    prev: "Add_n_nn"
+    next: "Add_form"
+    title_helper: "сделайте проблемную букву заглавной"
+
+<Add_form>:
+    name: "Add_form"
+    title: "ФОРМЫ СЛ."
+    counter: "7/7"
+    fp: "addtxt/Add_form.txt"
+    prev: "Add_iskl"
+    next: "Add_ud"
+    title_helper: "образец: правильное#любое неправильное написание"
