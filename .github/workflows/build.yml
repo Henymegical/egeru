@@ -1,40 +1,72 @@
-name: CI
+name: Build Android App
+
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Cache Buildozer global directory
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y \
+            build-essential \
+            git \
+            zlib1g-dev \
+            libncurses5-dev \
+            libgdbm-dev \
+            libnss3-dev \
+            libssl-dev \
+            libreadline-dev \
+            libffi-dev \
+            libsqlite3-dev \
+            libbz2-dev \
+            openjdk-17-jdk \
+            unzip \
+            zip \
+            ccache
+
+      - name: Install Buildozer
+        run: |
+          python3 -m pip install --upgrade pip wheel
+          pip3 install buildozer cython==0.29.36
+
+      - name: Cache Buildozer
         uses: actions/cache@v3
         with:
-          path: .buildozer_global
-          key: ${{ runner.os }}-buildozer-global-${{ hashFiles('buildozer.spec') }}
-          restore-keys: |
-            ${{ runner.os }}-buildozer-global-
-
-      - name: Cache Buildozer local directory
-        uses: actions/cache@v3
-        with:
-          path: .buildozer
+          path: |
+            ~/.buildozer
+            ~/.gradle
+            ~/.android
           key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
-          restore-keys: |
-            ${{ runner.os }}-buildozer-
 
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          command: buildozer android debug
-          buildozer_version: stable
+      - name: Accept Android licenses
+        run: |
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
-      - name: Upload artifacts
+      - name: Build APK
+        run: |
+          buildozer -v android clean
+          buildozer -v android debug
+          ls -la bin/
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: package
-          path: ${{ steps.buildozer.outputs.filename }}
+          name: android-app
+          path: bin/*.apk
