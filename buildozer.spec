@@ -40,4 +40,4 @@ android.enable_androidx = True
 android.allow_backup = false
 android.wakelock = True
 
-p4a.branch = 2023.08.25 
+p4a.branch = master
