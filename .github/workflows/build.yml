@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      # Используем корень репозитория в качестве рабочего пути для Android SDK
       ANDROID_HOME: ${{ github.workspace }}/android-sdk
 
     steps:
@@ -23,11 +24,16 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y python3-pip python3-setuptools git zip unzip openjdk-11-jdk
-          # Создаем каталог для Android SDK
-          mkdir -p $ANDROID_HOME/cmdline-tools/latest
-          # Скачиваем инструменты командной строки SDK (проверьте актуальность URL при необходимости)
+          # Создаём каталог для Android SDK
+          mkdir -p $ANDROID_HOME
+          # Создаём каталог для инструментария cmdline-tools
+          mkdir -p $ANDROID_HOME/cmdline-tools
+          # Скачиваем архив инструментов (обновите URL, если потребуется)
           curl -o cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-          unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
+          # Распаковываем архив в каталог cmdline-tools
+          unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
+          # В архиве создаётся папка "cmdline-tools"; переименовываем её в "latest" для соответствия пути
+          mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
           rm cmdline-tools.zip
           echo "ANDROID_HOME is set to $ANDROID_HOME"
 
