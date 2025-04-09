@@ -42,21 +42,22 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
         with:
-          ndk-version: 25.2.9519653
-          build-tools-version: 34.0.0
-          platform-tools-version: 34.0.0
-          platforms-version: "android-34"
+          components: |
+            platform-tools
+            platforms;android-34
+            build-tools;34.0.0
+            ndk;25.2.9519653
 
-      - name: Install Buildozer with fixed deps
+      - name: Install Buildozer and dependencies
         run: |
           python3 -m pip install --upgrade pip wheel
           pip3 install buildozer cython==0.29.36 sh==2.0.6
           pip3 install git+https://github.com/kivy/python-for-android.git
 
-      - name: Force p4a initialization
+      - name: Initialize Buildozer
         run: |
-          rm -rf .buildozer/android/platform/python-for-android
           buildozer android update
+          buildozer android clean
 
       - name: Build APK
         run: |
