@@ -16,11 +16,9 @@ requirements =
     requests
 
 orientation = portrait
-
-# Android-специфичные настройки
 android.api = 33
 android.minapi = 21
-android.ndk = 23b  # Версия 25b может вызывать проблемы
+android.ndk = 25b  # Явно указываем новую версию
 android.sdk = 34
 android.archs = arm64-v8a, armeabi-v7a
 android.permissions = 
@@ -29,15 +27,9 @@ android.permissions =
     WRITE_EXTERNAL_STORAGE,
     READ_EXTERNAL_STORAGE
 
-# Градл зависимости
 android.gradle_dependencies =
     com.android.tools.build:gradle:7.4.2,
     androidx.appcompat:appcompat:1.6.1,
     androidx.core:core-ktx:1.12.0
 
-# Дополнительные флаги
-android.enable_androidx = True
-android.allow_backup = false
-android.wakelock = True
-
-p4a.branch = master
+p4a.branch = 2024.1.21  # Используем стабильную версию
