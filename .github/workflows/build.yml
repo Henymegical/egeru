@@ -30,7 +30,7 @@ jobs:
           sudo apt update
           sudo apt install -y \
             zip unzip openjdk-17-jdk \
-            libncurses5 libstdc++6 libffi-dev \
+            libncurses6 libstdc++6 libffi-dev \
             libssl-dev libsqlite3-dev zlib1g-dev \
             git python3-pip libbz2-dev
 
@@ -47,5 +47,3 @@ jobs:
         with:
           name: app-debug.apk
           path: bin/*.apk
-
-
