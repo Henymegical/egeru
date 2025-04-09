@@ -34,11 +34,15 @@ jobs:
             libssl-dev libsqlite3-dev zlib1g-dev \
             git python3-pip libbz2-dev
 
-      - name: Buildozer Android Clean
+      - name: First Build to setup environment
+        run: |
+          buildozer android debug
+
+      - name: Clean build artifacts (optional)
         run: |
           buildozer android clean
 
-      - name: Build APK
+      - name: Rebuild APK
         run: |
           buildozer android debug
 
