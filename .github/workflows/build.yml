@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 50
 
     steps:
       - name: Checkout code
@@ -41,27 +41,22 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
+        with:
+          ndk-version: 23.1.7779620  # Соответствует android.ndk = 23b
+          build-tools-version: 34.0.0
+          platform-tools-version: 34.0.0
+          platforms-version: "android-33"
 
-      - name: Install Android tools
-        run: |
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-33" "build-tools;34.0.0"
-          sdkmanager --install "cmdline-tools;latest"
-          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
-
-      - name: Install Buildozer
+      - name: Install Buildozer and dependencies
         run: |
           python3 -m pip install --upgrade pip wheel
           pip3 install buildozer cython==0.29.36
+          pip3 install python-for-android==2023.08.25  # Явная установка p4a
 
-      - name: Cache Buildozer
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.buildozer
-            ~/.gradle
-            ~/.android
-          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
+      - name: Initialize Buildozer
+        run: |
+          buildozer init
+          buildozer android update  # Ключевой шаг!
 
       - name: Build APK
         run: |
