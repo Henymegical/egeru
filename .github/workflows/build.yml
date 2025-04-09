@@ -47,16 +47,16 @@ jobs:
           platform-tools-version: 34.0.0
           platforms-version: "android-34"
 
-      - name: Install dependencies
+      - name: Install Buildozer with fixed deps
         run: |
           python3 -m pip install --upgrade pip wheel
           pip3 install buildozer cython==0.29.36 sh==2.0.6
-          pip3 install python-for-android==2024.1.21
+          pip3 install git+https://github.com/kivy/python-for-android.git
 
-      - name: Initialize Buildozer
+      - name: Force p4a initialization
         run: |
+          rm -rf .buildozer/android/platform/python-for-android
           buildozer android update
-          buildozer android clean
 
       - name: Build APK
         run: |
