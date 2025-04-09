@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: mykivymdapp-apk
+          path: ./downloaded_apk
       # Шаг 1. Клонирование репозитория
       - name: Checkout repository
         uses: actions/checkout@v3
