@@ -53,15 +53,10 @@ jobs:
           pip3 install buildozer cython==0.29.36 sh==2.0.6
           pip3 install python-for-android==2024.1.21
 
-      - name: Initialize Buildozer (if needed)
+      - name: Initialize Buildozer
         run: |
-          if [ ! -f buildozer.spec ]; then
-            buildozer init
-          fi
           buildozer android update
-
-      - name: Clean build
-        run: buildozer android clean
+          buildozer android clean
 
       - name: Build APK
         run: |
