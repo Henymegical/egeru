@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 60
 
     steps:
       - name: Checkout code
@@ -42,21 +42,22 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
         with:
-          ndk-version: 23.1.7779620  # Соответствует android.ndk = 23b
+          ndk-version: 25.2.9519653  # Для совместимости с master branch
           build-tools-version: 34.0.0
           platform-tools-version: 34.0.0
-          platforms-version: "android-33"
+          platforms-version: "android-34"
 
-      - name: Install Buildozer and dependencies
+      - name: Install Buildozer and p4a from master
         run: |
           python3 -m pip install --upgrade pip wheel
-          pip3 install buildozer cython==0.29.36
-          pip3 install python-for-android==2023.08.25  # Явная установка p4a
+          pip3 install git+https://github.com/kivy/buildozer.git
+          pip3 install git+https://github.com/kivy/python-for-android.git
+          pip3 install cython==0.29.36
 
       - name: Initialize Buildozer
         run: |
           buildozer init
-          buildozer android update  # Ключевой шаг!
+          buildozer android update
 
       - name: Build APK
         run: |
