@@ -42,25 +42,29 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
         with:
-          ndk-version: 25.2.9519653  # Для совместимости с master branch
+          ndk-version: 25.2.9519653
           build-tools-version: 34.0.0
           platform-tools-version: 34.0.0
           platforms-version: "android-34"
 
-      - name: Install Buildozer and p4a from master
+      - name: Install Buildozer with fixed dependencies
         run: |
           python3 -m pip install --upgrade pip wheel
-          pip3 install git+https://github.com/kivy/buildozer.git
-          pip3 install git+https://github.com/kivy/python-for-android.git
-          pip3 install cython==0.29.36
+          pip3 install buildozer==1.5.0 cython==0.29.36 sh==2.0.6
+          pip3 install python-for-android==2024.1.21
 
       - name: Initialize Buildozer
         run: |
+          buildozer init
           buildozer android update
+
+      - name: Clean build cache
+        run: |
+          buildozer android clean
+          rm -rf ~/.buildozer .buildozer
 
       - name: Build APK
         run: |
-          buildozer -v android clean
           buildozer -v android debug
           ls -la bin/
 
