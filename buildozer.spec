@@ -32,4 +32,4 @@ android.gradle_dependencies =
     androidx.appcompat:appcompat:1.6.1,
     androidx.core:core-ktx:1.12.0
 
-p4a.branch = 2024.1.21  # Используем стабильную версию
+p4a.branch = 2024.1.21
