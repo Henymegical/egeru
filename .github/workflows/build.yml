@@ -56,7 +56,6 @@ jobs:
 
       - name: Initialize Buildozer
         run: |
-          buildozer init
           buildozer android update
 
       - name: Build APK
