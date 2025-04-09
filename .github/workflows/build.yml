@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      # Используем корень репозитория в качестве рабочего пути для Android SDK
+      # Используем корень репозитория для размещения Android SDK
       ANDROID_HOME: ${{ github.workspace }}/android-sdk
 
     steps:
@@ -19,43 +19,54 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Установка системных зависимостей и Android SDK Command Line Tools
+      # 2. Настройка Python версии 3.9
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # 3. Установка системных пакетов и Android SDK Command Line Tools
       - name: Install system dependencies and Android SDK Command Line Tools
         run: |
           sudo apt update
           sudo apt install -y python3-pip python3-setuptools git zip unzip openjdk-11-jdk
           # Создаём каталог для Android SDK
           mkdir -p $ANDROID_HOME
-          # Создаём каталог для инструментария cmdline-tools
+          # Создаём каталог для cmdline-tools
           mkdir -p $ANDROID_HOME/cmdline-tools
-          # Скачиваем архив инструментов (обновите URL, если потребуется)
+          # Скачиваем архив командных инструментов SDK (проверьте актуальность URL)
           curl -o cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-          # Распаковываем архив в каталог cmdline-tools
           unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
-          # В архиве создаётся папка "cmdline-tools"; переименовываем её в "latest" для соответствия пути
+          # Переименовываем извлечённую директорию "cmdline-tools" в "latest"
           mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
           rm cmdline-tools.zip
           echo "ANDROID_HOME is set to $ANDROID_HOME"
 
-      # 3. Установка Python-зависимостей: Buildozer, cython и virtualenv
+      # 4. Установка Python-зависимостей: Buildozer, cython и virtualenv
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
           pip install buildozer cython==0.29.21 virtualenv
 
-      # 4. Автоматическое принятие лицензий Android SDK
+      # 5. Автоматическое принятие лицензий Android SDK
       - name: Accept Android SDK licenses
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
-      # 5. Сборка APK с помощью Buildozer
+      # 6. Клонирование python-for-android в нужное место, чтобы Buildozer его нашёл
+      - name: Clone python-for-android
+        run: |
+          mkdir -p .buildozer/android/platform
+          git clone https://github.com/kivy/python-for-android.git .buildozer/android/platform/python-for-android
+
+      # 7. Сборка APK с помощью Buildozer
       - name: Build APK with Buildozer
         run: |
           buildozer android clean
           buildozer android debug
           ls -la bin/
 
-      # 6. Сохранение собранного APK в качестве артефакта сборки
+      # 8. Сохранение собранного APK в качестве артефакта сборки
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
