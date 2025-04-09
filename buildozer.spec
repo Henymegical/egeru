@@ -13,7 +13,7 @@ package.domain = org.test
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,ttf,txt,json
+source.include_exts = 
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = assets/*,images/*.png
@@ -36,15 +36,8 @@ version = 0.1
 # version.filename = %(source.dir)s/main.py
 
 # (list) Application requirements
-# comma separated e.g. requirements = sqlite3,kivy,kivymd
-requirements = python3,
-    kivy,
-    https://github.com/kivymd/KivyMD/archive/master.zip,
-    materialyoucolor,
-    exceptiongroup,
-    asyncgui,
-    asynckivy,
-    pillow
+# comma separated e.g. requirements = sqlite3,kivy
+requirements = python3,kivy,kivymd,exceptiongroup,asyncgui,asynckivy,pillow,android
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -58,7 +51,7 @@ requirements = python3,
 
 # (list) Supported orientations
 # Valid options are: landscape, portrait, portrait-reverse or landscape-reverse
-orientation = portrait,landscape
+orientation = portrait
 
 # (list) List of service to declare
 #services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
@@ -208,7 +201,7 @@ android.accept_sdk_license = True
 #android.add_resources =
 
 # (list) Gradle dependencies to add
-#android.gradle_dependencies =
+android.gradle_dependencies = 'com.github.chrisbanes:PhotoView:latest.release'
 
 # (bool) Enable AndroidX support. Enable when 'android.gradle_dependencies'
 # contains an 'androidx' package, or any package from Kotlin source.
