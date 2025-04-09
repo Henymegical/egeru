@@ -39,6 +39,16 @@ jobs:
             zip \
             ccache
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Install Android tools
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;34.0.0"
+          sdkmanager --install "cmdline-tools;latest"
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
+
       - name: Install Buildozer
         run: |
           python3 -m pip install --upgrade pip wheel
@@ -52,12 +62,6 @@ jobs:
             ~/.gradle
             ~/.android
           key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
-
-      - name: Accept Android licenses
-        run: |
-          mkdir -p ~/.android
-          touch ~/.android/repositories.cfg
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Build APK
         run: |
