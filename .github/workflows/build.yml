@@ -47,21 +47,21 @@ jobs:
           platform-tools-version: 34.0.0
           platforms-version: "android-34"
 
-      - name: Install Buildozer with fixed dependencies
+      - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip wheel
-          pip3 install buildozer==1.5.0 cython==0.29.36 sh==2.0.6
+          pip3 install buildozer cython==0.29.36 sh==2.0.6
           pip3 install python-for-android==2024.1.21
 
-      - name: Initialize Buildozer
+      - name: Initialize Buildozer (if needed)
         run: |
-          buildozer init
+          if [ ! -f buildozer.spec ]; then
+            buildozer init
+          fi
           buildozer android update
 
-      - name: Clean build cache
-        run: |
-          buildozer android clean
-          rm -rf ~/.buildozer .buildozer
+      - name: Clean build
+        run: buildozer android clean
 
       - name: Build APK
         run: |
