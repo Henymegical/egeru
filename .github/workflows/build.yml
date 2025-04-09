@@ -40,13 +40,12 @@ jobs:
             ccache
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
+        uses: google-github-actions/setup-android@v1
         with:
-          components: |
-            platform-tools
-            platforms;android-34
-            build-tools;34.0.0
-            ndk;25.2.9519653
+          ndk-version: 25.2.9519653
+          build-tools-version: 34.0.0
+          platform-tools-version: 34.0.0
+          platforms: android-34
 
       - name: Install Buildozer and dependencies
         run: |
