@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd==1.2.0,pillow
+requirements = python3,kivy,kivymd==1.2.0,materialyoucolor,exceptiongroup,asyncgui,asynckivy,pillow   
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -201,7 +201,7 @@ android.accept_sdk_license = True
 #android.add_resources =
 
 # (list) Gradle dependencies to add
-android.gradle_dependencies = 'com.github.chrisbanes:PhotoView:latest.release'
+# android.gradle_dependencies = 'com.github.chrisbanes:PhotoView:latest.release'
 
 # (bool) Enable AndroidX support. Enable when 'android.gradle_dependencies'
 # contains an 'androidx' package, or any package from Kotlin source.
