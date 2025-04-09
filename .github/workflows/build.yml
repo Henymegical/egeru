@@ -10,48 +10,46 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # Устанавливаем переменную окружения ANDROID_HOME – путь, куда будет загружен Android SDK
     env:
-      ANDROID_HOME: ${{ runner.workspace }}/android-sdk
+      ANDROID_HOME: ${{ github.workspace }}/android-sdk
 
     steps:
       # 1. Клонирование репозитория
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Установка необходимых системных пакетов и Android SDK Command Line Tools
+      # 2. Установка системных зависимостей и Android SDK Command Line Tools
       - name: Install system dependencies and Android SDK Command Line Tools
         run: |
           sudo apt update
           sudo apt install -y python3-pip python3-setuptools git zip unzip openjdk-11-jdk
           # Создаем каталог для Android SDK
           mkdir -p $ANDROID_HOME/cmdline-tools/latest
-          # Скачиваем инструменты командной строки SDK (обновите URL, если потребуется)
+          # Скачиваем инструменты командной строки SDK (проверьте актуальность URL при необходимости)
           curl -o cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
           unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
           rm cmdline-tools.zip
           echo "ANDROID_HOME is set to $ANDROID_HOME"
 
-      # 3. Установка Python‑зависимостей: Buildozer, cython и virtualenv
+      # 3. Установка Python-зависимостей: Buildozer, cython и virtualenv
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
           pip install buildozer cython==0.29.21 virtualenv
 
-      # 4. Принятие лицензий Android SDK
+      # 4. Автоматическое принятие лицензий Android SDK
       - name: Accept Android SDK licenses
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
-      # 5. Запуск сборки APK с помощью Buildozer
+      # 5. Сборка APK с помощью Buildozer
       - name: Build APK with Buildozer
         run: |
-          # Опционально, если ранее проводились сборки – очистить их:
           buildozer android clean
           buildozer android debug
           ls -la bin/
 
-      # 6. Сохранение полученного APK как артефакта
+      # 6. Сохранение собранного APK в качестве артефакта сборки
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v3
         with:
