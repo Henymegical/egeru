@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd,exceptiongroup,asyncgui,asynckivy,pillow,android
+requirements = python3,kivy,kivymd==1.2.0,exceptiongroup,asyncgui,asynckivy,pillow
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -67,7 +67,7 @@ orientation = portrait
 osx.python_version = 3
 
 # Kivy version to use
-osx.kivy_version = 2.3.0
+osx.kivy_version = 2.2.1
 
 #
 # Android specific
