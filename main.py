@@ -11,21 +11,12 @@ import config as cfg
 from kivy.clock import Clock
 from kivy.properties import NumericProperty, BooleanProperty
 from kivy.storage.jsonstore import JsonStore
+from kivy.factory import Factory
 from kivy.core.window import Window
 #Window.size = (cfg.W, cfg.H)
 
 from kivymd.app import MDApp
-from kivymd.uix.screen import MDScreen
 
-
-
-#=========================MENU SCREENS======================
-class Mainmenu(MDScreen):
-    pass
-class Playmenu(MDScreen):
-    pass
-class Optionsmenu(MDScreen):
-    pass
 
 
 
@@ -49,11 +40,11 @@ class Myapp(MDApp):
         if self.store.exists('user_settings'):
             settings = self.store.get('user_settings')
             self.hp_value = settings.get('hp', cfg.HP)
-            self.theme_cls.theme_style = settings.get('theme', "Dark")
+            self.theme_cls.theme_style = settings.get('theme', cfg.THEME)
             self._initial_switch = settings.get('switch', False)
         else:
             self.hp_value = cfg.HP
-            self.theme_cls.theme_style = "Dark"
+            self.theme_cls.theme_style = cfg.THEME
             self._initial_switch = False
 
 
@@ -213,7 +204,20 @@ class Myapp(MDApp):
         self.theme_cls.theme_style = self.theme_cls.theme_style
         self.theme_cls.primary_palette = "BlueGray"
         Clock.schedule_once(lambda dt: Window.bind(on_keyboard=self.on_keyboard))
-        return super().build()
+
+        self.sm = self.root
+        return self.root
+
+    def switch_screen(self, screen_name):
+        if not self.sm.has_screen(screen_name):
+            try:
+                screen_class = getattr(Factory, screen_name)
+                screen_instance = screen_class(name=screen_name)
+                self.sm.add_widget(screen_instance)
+            except Exception as e:
+                print(f"Ошибка при загрузке экрана {screen_name}: {e}")
+                return
+        self.sm.current = screen_name
 
 
 if __name__ == '__main__':
