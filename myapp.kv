@@ -20,21 +20,21 @@ ScreenManager:
     Playmenu:
     #Optionsmenu:
 
-    #Udareniya:
-    #Slovarniye:
-    #Narechiya:
-    #Prepri:
-    #Isklyucheniya:
-    #N_nn:
-    #Formi:
+    Udareniya:
+    Slovarniye:
+    Narechiya:
+    Prepri:
+    Isklyucheniya:
+    N_nn:
+    Formi:
 
-    UdDO:
-    SlDO:
-    NaDO:
-    PrDO:
-    N_DO:
-    IsDO:
-    FoDO:
+    #UdDO:
+    #SlDO:
+    #NaDO:
+    #PrDO:
+    #N_DO:
+    #IsDO:
+    #FoDO:
 
     #Ud:
     #Sl:
@@ -444,31 +444,31 @@ ScreenManager:
                 Menubutton:
                     text: "УДАРЕНИЯ"
                     size_hint: 1, 1
-                    on_release: app.switch_screen("Udareniya")
+                    on_release: root.manager.current = "Udareniya"
                 Menubutton:
                     text: "СЛОВАРНЫЕ СЛОВА"
                     size_hint: 1, 1
-                    on_release: app.switch_screen("Slovarniye")
+                    on_release: root.manager.current = "Slovarniye"
                 Menubutton:
                     text: "НАРЕЧИЯ"
                     size_hint: 1, 1
-                    on_release: app.switch_screen("Narechiya")
+                    on_release: root.manager.current = "Narechiya"
                 Menubutton:
                     text: "ПРЕ/ПРИ"
                     size_hint: 1, 1
-                    on_release: app.switch_screen("Prepri")
+                    on_release: root.manager.current = "Prepri"
                 Menubutton:
                     text: "Н/НН"
                     size_hint: 1, 1
-                    on_release: app.switch_screen("N_nn")
+                    on_release: root.manager.current = "N_nn"
                 Menubutton:
                     text: "ИСКЛЮЧЕНИЯ"
                     size_hint: 1, 1
-                    on_release: app.switch_screen("Isklyucheniya")
+                    on_release: root.manager.current = "Isklyucheniya"
                 Menubutton:
                     text: "ФОРМЫ СЛОВ"
                     size_hint: 1, 1
-                    on_release: app.switch_screen("Formi")
+                    on_release: root.manager.current = "Formi"
 
         MDBoxLayout:
             size_hint: 1, None
