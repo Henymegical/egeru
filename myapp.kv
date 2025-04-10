@@ -15,32 +15,18 @@
 
 ScreenManager:
     transition: FadeTransition(duration=0.2)
+    id: screen_manager
     Mainmenu:
     Playmenu:
-    Optionsmenu:
-    Ud:
-    Sl:
-    Na:
-    Pr:
-    N_:
-    Is:
-    Fo:
+    #Optionsmenu:
 
-    Add_ud:
-    Add_sl_sl:
-    Add_nar:
-    Add_iskl:
-    Add_pre_pri:
-    Add_n_nn:
-    Add_form:
-    
-    Udareniya:
-    Slovarniye:
-    Narechiya:
-    Prepri:
-    Isklyucheniya:
-    N_nn:
-    Formi:
+    #Udareniya:
+    #Slovarniye:
+    #Narechiya:
+    #Prepri:
+    #Isklyucheniya:
+    #N_nn:
+    #Formi:
 
     UdDO:
     SlDO:
@@ -49,6 +35,24 @@ ScreenManager:
     N_DO:
     IsDO:
     FoDO:
+
+    #Ud:
+    #Sl:
+    #Na:
+    #Pr:
+    #N_:
+    #Is:
+    #Fo:
+
+    #Add_ud:
+    #Add_sl_sl:
+    #Add_nar:
+    #Add_iskl:
+    #Add_pre_pri:
+    #Add_n_nn:
+    #Add_form:
+
+
 
 
 <MDScreen>:
@@ -242,19 +246,20 @@ ScreenManager:
                 size_hint_x: 1
                 font_size: dp(15)
                 font_name: SF
-                on_release: root.update_do(root.do)
+                on_release: 
+                    root.update_do(root.do)
                 
             MDIconButton:
                 id: btn_del
                 icon: "arrow-left"
-                on_release: root.manager.current = root.prev
+                on_release: app.switch_screen(root.prev)
             CustomLabel:
                 text:root.counter
                 font_size: dp(20)
             MDIconButton:
                 id: btn_del
                 icon: "arrow-right"
-                on_release: root.manager.current = root.next
+                on_release: app.switch_screen(root.next)
 
 <Add_Screen>:
     viewclass: 'Add_Element'
@@ -346,16 +351,16 @@ ScreenManager:
             MDIconButton:
                 id: btn_del
                 icon: "arrow-left"
-                on_release: root.manager.current = root.prev
+                on_release: app.switch_screen(root.prev)
             CustomLabel:
                 text:root.counter
                 font_size: dp(20)
             MDIconButton:
                 id: btn_del
                 icon: "arrow-right"
-                on_release: root.manager.current = root.next
+                on_release: app.switch_screen(root.next)
 #===================================================================================================
-<Mainmenu>:
+<Mainmenu@MDScreen>:
     name: "Mainmenu"
     MDBoxLayout:
         orientation: "vertical"
@@ -387,11 +392,11 @@ ScreenManager:
                 Menubutton:
                     size_hint: 1, 1
                     text: "ДОБАВИТЬ СЛОВА"
-                    on_release: root.manager.current = "Add_ud"
+                    on_release: app.switch_screen("Add_ud")
                 Menubutton:
                     size_hint: 1, 1
                     text: "НАСТРОЙКИ"
-                    on_release: root.manager.current = "Optionsmenu"
+                    on_release: app.switch_screen("Optionsmenu")
                 Menubutton:
                     size_hint: 1, 1
                     text: "ПРОКРАСТИНИРОВАТЬ"
@@ -412,7 +417,7 @@ ScreenManager:
                 halign: "right"
                 valign: "bottom"
 
-<Playmenu>:
+<Playmenu@MDScreen>:
     name: "Playmenu"
     MDBoxLayout:
         orientation: "vertical"
@@ -439,31 +444,31 @@ ScreenManager:
                 Menubutton:
                     text: "УДАРЕНИЯ"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Udareniya"
+                    on_release: app.switch_screen("Udareniya")
                 Menubutton:
                     text: "СЛОВАРНЫЕ СЛОВА"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Slovarniye"
+                    on_release: app.switch_screen("Slovarniye")
                 Menubutton:
                     text: "НАРЕЧИЯ"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Narechiya"
+                    on_release: app.switch_screen("Narechiya")
                 Menubutton:
                     text: "ПРЕ/ПРИ"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Prepri"
+                    on_release: app.switch_screen("Prepri")
                 Menubutton:
                     text: "Н/НН"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "N_nn"
+                    on_release: app.switch_screen("N_nn")
                 Menubutton:
                     text: "ИСКЛЮЧЕНИЯ"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Isklyucheniya"
+                    on_release: app.switch_screen("Isklyucheniya")
                 Menubutton:
                     text: "ФОРМЫ СЛОВ"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Formi"
+                    on_release: app.switch_screen("Formi")
 
         MDBoxLayout:
             size_hint: 1, None
@@ -473,7 +478,7 @@ ScreenManager:
             MDRectangleFlatIconButton:
                 text: "РНО"
                 size_hint: 0.9, None
-                on_release: root.manager.current = "Ud"
+                on_release: app.switch_screen("Ud")
                 font_size: dp(15)
                 font_name: SF
                 icon: "list-box-outline"
@@ -507,7 +512,7 @@ ScreenManager:
                         on_active: app.switch_active = self.active
                         size_hint_x: 1
 
-<Optionsmenu>:
+<Optionsmenu@MDScreen>:
     name: "Optionsmenu"
     MDBoxLayout:
         orientation: "vertical"
@@ -702,7 +707,7 @@ ScreenManager:
             hp_value: root.hp_value
         MDBoxLayout:
             orientation: "vertical"
-            padding: self.width * 0.05, 0
+            padding: self.width * 0.04, 0
             AutoFontLabel:
                 text: root.question_text
             AutoFontLabel:
@@ -712,7 +717,7 @@ ScreenManager:
             MDGridLayout:
                 cols: 5
                 rows: 2
-                spacing: dp(5)
+                spacing: dp(2.5)
                 AnsButton:
                     elevation: dp(1)
                     text: "А"
@@ -961,7 +966,7 @@ ScreenManager:
             hp_value: root.hp_value
         MDBoxLayout:
             orientation: "vertical"
-            padding: self.width * 0.05, 0
+            padding: self.width * 0.04, 0
             AutoFontLabel:
                 text: root.question_text
             AutoFontLabel:
@@ -971,7 +976,7 @@ ScreenManager:
             MDGridLayout:
                 cols: 5
                 rows: 2
-                spacing: dp(5)
+                spacing: dp(2.5)
                 AnsButton:
                     elevation: dp(1)
                     text: "А"
