@@ -3,6 +3,8 @@ from kivy.uix.recycleview import RecycleView
 from kivy.properties import NumericProperty, StringProperty, BooleanProperty, ObjectProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.screen import MDScreen
+from kivymd.app import MDApp
+from kivy.factory import Factory
 
 class RNO_Element(RecycleDataViewBehavior, MDBoxLayout):
     index = NumericProperty(0)
@@ -73,9 +75,9 @@ class RNO_Screen(RecycleView):
 
 class BaseRNOScreen(MDScreen):
     def update_do(self, do):
-        uddo_screen = self.manager.get_screen(do)
-        uddo_screen.reread()  
-        self.manager.current = do 
+        MDApp.get_running_app().switch_screen(do)
+        self.manager.get_screen(do).reread() 
+
     def clear_all(self, rno_screen):
         rno_screen.data = []
         rno_screen.save_data()
