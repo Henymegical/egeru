@@ -170,11 +170,11 @@ class BaseUdarScreen(MDScreen):
 
 class BaseGameScreen(MDScreen):
     score_value = NumericProperty(0)
-    hp_value = NumericProperty(0)
-    left_value = NumericProperty(0)
+    hp_value = NumericProperty(cfg.HP)
+    left_value = NumericProperty(1)
     result_text = StringProperty("")
     question_text = StringProperty("")
-    all_words = NumericProperty(0)
+    all_words = NumericProperty(1)
 
     dataset = None
     file_name = None
