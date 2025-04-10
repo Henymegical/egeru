@@ -6,6 +6,7 @@ from kivymd.uix.screen import MDScreen
 import config as cfg
 from custombutton import CustomButton
 from functools import partial
+from kivy.factory import Factory
 from random import choice
 from copy import deepcopy
 
@@ -131,6 +132,9 @@ class WordButtons(MDGridLayout):
 
     def update_rno_screen(self):
         app = MDApp.get_running_app()
+        if not app.root.has_screen("Ud"):
+            ud_screen = Factory.Ud(name="Ud")
+            app.root.add_widget(ud_screen)
         ud_screen = app.root.get_screen('Ud')
         rno_screen = ud_screen.ids.rno_screen
         rno_screen.load_data()
@@ -267,7 +271,11 @@ class BaseGameScreen(MDScreen):
 
     def update_rno_screen(self):
         app = MDApp.get_running_app()
-        _screen = app.root.get_screen(self.file_name[7:9])
+        class_name = self.file_name[7:9]
+        if not app.root.has_screen(class_name):
+            _screen = getattr(Factory, class_name)()
+            app.root.add_widget(_screen)
+        _screen = app.root.get_screen(class_name)
         rno_screen = _screen.ids.rno_screen
         rno_screen.load_data()
         rno_screen.refresh_from_data()
