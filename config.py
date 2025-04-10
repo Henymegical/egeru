@@ -4,8 +4,9 @@
 W = 374
 H = 827
 
-HP = 5
+HP = 10
 LOWHP = 3
 
+THEME = 'Light'
 SF = 'fonts/ShantellSans-VariableFont_BNCE,INFM,SPAC,wght.ttf'
 BF = 'fonts/Neucha-Regular.ttf'
