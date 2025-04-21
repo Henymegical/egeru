@@ -13,7 +13,7 @@ from kivy.properties import NumericProperty, BooleanProperty
 from kivy.storage.jsonstore import JsonStore
 from kivy.factory import Factory
 from kivy.core.window import Window
-Window.size = (cfg.W, cfg.H)
+#Window.size = (cfg.W, cfg.H)
 
 from kivymd.app import MDApp
 
