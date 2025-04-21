@@ -9,6 +9,7 @@
 #: import RNO_Screen rnologic.RNO_Screen
 #: import Add_Screen addlogic.Add_Screen
 #: import WordButtons gamelogic.WordButtons
+#: import LB_Screen lblogic.LB_Screen
 
 
 
@@ -19,14 +20,15 @@ ScreenManager:
     Mainmenu:
     Playmenu:
     #Optionsmenu:
+    Leaderboard:
 
-    Udareniya:
-    Slovarniye:
-    Narechiya:
-    Prepri:
-    Isklyucheniya:
-    N_nn:
-    Formi:
+    #Udareniya:
+    #Slovarniye:
+    #Narechiya:
+    #Prepri:
+    #Isklyucheniya:
+    #N_nn:
+    #Formi:
 
     #UdDO:
     #SlDO:
@@ -65,7 +67,7 @@ ScreenManager:
 
 <Menubutton@MDRaisedButton>:
     shadow_color: (1, 1, 1, 0.3) if app.theme_cls.theme_style == "Dark" else (0, 0, 0, 0.4)
-    elevation: dp(1.75)
+    elevation: dp(1.5)
     font_name: SF
     font_size: dp(25)
 
@@ -110,7 +112,7 @@ ScreenManager:
 
 <AnsButton@MDRaisedButton>:
     shadow_color: (1, 1, 1, 0.3) if app.theme_cls.theme_style == "Dark" else (0, 0, 0, 0.4)
-    elevation: dp(1.75)
+    elevation: dp(1.5)
     font_name: SF
     font_size: dp(20)
 
@@ -305,7 +307,7 @@ ScreenManager:
         MDIconButton:
             icon: "arrow-left"
             pos_hint: {"left": 1, "center_y": 0.5}
-            on_release: root.manager.current = "Playmenu"
+            on_release: root.manager.current = "Mainmenu"
         MDBoxLayout:
             size_hint: 1, None
             height: dp(75)
@@ -359,6 +361,83 @@ ScreenManager:
                 id: btn_del
                 icon: "arrow-right"
                 on_release: app.switch_screen(root.next)
+
+
+<LB_Screen>:
+    viewclass: 'LB_Element'
+
+    RecycleBoxLayout:
+        padding: dp(15), 0, dp(15), dp(10)
+        default_size: None, dp(60)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+
+
+    
+<LBLBL@MDLabel>:
+    txt: None
+    id: lbl
+    text: str(root.txt)
+    size_hint_y: None
+    height: dp(45)
+    halign: 'center'
+    valign: 'middle'
+    font_size: dp(10)
+    font_name: SF
+
+<LB_Element>:
+    bord: False
+    size_hint_y: None
+    height: dp(60)
+    spacing: dp(5)
+    halign: 'center'
+    valign: 'middle'
+    LBLBL:
+        txt: f'{root.index+1}.'
+        font_size: dp(15)
+        size_hint_x: None
+        width: dp(24) if root.bord == False else max(dp(24), dp(8*len(str(self.txt))))
+        min_width: dp(24)
+        halign: 'left'
+    LBLBL:
+        txt: root.username
+        font_size: dp(15)
+        size_hint_x: None
+        width: dp(100)
+        halign: 'left'
+    LBLBL:
+        txt: root.stat_1
+        size_hint_x: 0.1
+    LBLBL:
+        txt: root.stat_2
+        size_hint_x: 0.1 
+    LBLBL:
+        txt: root.stat_3
+        size_hint_x: 0.1
+    LBLBL:
+        txt: root.stat_4
+        size_hint_x: 0.1 
+    LBLBL:
+        txt: root.stat_5
+        size_hint_x: 0.1 
+    LBLBL:
+        txt: root.stat_6
+        size_hint_x: 0.1 
+    LBLBL:
+        txt: root.stat_7
+        size_hint_x: 0.1 
+    LBLBL:
+        txt: root.mistakes
+        size_hint_x: 0.15 
+    LBLBL:
+        txt: root.solved
+        size_hint_x: 0.15
+        
+
+
+
 #===================================================================================================
 <Mainmenu@MDScreen>:
     name: "Mainmenu"
@@ -388,7 +467,8 @@ ScreenManager:
                     on_release: root.manager.current = "Playmenu"
                 Menubutton:
                     size_hint: 1, 1
-                    text: "ЛИДЕРБОРД(soon)"
+                    text: "ЛИДЕРБОРД"
+                    on_release: app.switch_screen("Leaderboard")
                 Menubutton:
                     size_hint: 1, 1
                     text: "ДОБАВИТЬ СЛОВА"
@@ -405,7 +485,7 @@ ScreenManager:
             size_hint: 1, None
             height: dp(75)
             height: dp(48)
-            padding: dp(25)
+            padding: dp(20), dp(25)
             CustomLabel:
                 font_size: dp(15)
                 text: "© Stroch Corporation"
@@ -413,7 +493,7 @@ ScreenManager:
                 valign: "bottom"
             CustomLabel:
                 font_size: dp(15)
-                text: "0.1 Beta"
+                text: "0.2 Beta"
                 halign: "right"
                 valign: "bottom"
 
@@ -444,31 +524,31 @@ ScreenManager:
                 Menubutton:
                     text: "УДАРЕНИЯ"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Udareniya"
+                    on_release: app.switch_screen("Udareniya")
                 Menubutton:
                     text: "СЛОВАРНЫЕ СЛОВА"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Slovarniye"
+                    on_release: app.switch_screen("Slovarniye")
                 Menubutton:
                     text: "НАРЕЧИЯ"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Narechiya"
+                    on_release: app.switch_screen("Narechiya")
                 Menubutton:
                     text: "ПРЕ/ПРИ"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Prepri"
+                    on_release: app.switch_screen("Prepri")
                 Menubutton:
                     text: "Н/НН"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "N_nn"
+                    on_release: app.switch_screen("N_nn")
                 Menubutton:
                     text: "ИСКЛЮЧЕНИЯ"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Isklyucheniya"
+                    on_release: app.switch_screen("Isklyucheniya")
                 Menubutton:
                     text: "ФОРМЫ СЛОВ"
                     size_hint: 1, 1
-                    on_release: root.manager.current = "Formi"
+                    on_release: app.switch_screen("Formi")
 
         MDBoxLayout:
             size_hint: 1, None
@@ -1261,3 +1341,105 @@ ScreenManager:
     prev: "Add_iskl"
     next: "Add_ud"
     title_helper: "образец: правильное#любое неправильное написание"
+
+<Leaderboard>:
+    name: "Leaderboard"
+    MDBoxLayout:
+        orientation: "vertical"
+        MDIconButton:
+            icon: "arrow-left"
+            pos_hint: {"left": 1, "center_y": 0.5}
+            on_release: root.manager.current = "Mainmenu"
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, None
+            height: dp(75)
+            MainLabel:
+                text: "ЛИДЕРБОРД"
+
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: dp(15), 0
+            spacing: dp(5)
+
+            LBLBL:
+                txt: '№'
+                font_size: dp(15)
+                size_hint_x: None
+                width: dp(24)
+                halign: 'left'
+                theme_text_color: 'Secondary'
+            LBLBL:
+                txt: 'НИК'
+                font_size: dp(15)
+                size_hint_x: None
+                width: dp(100)
+                theme_text_color: 'Secondary'
+            LBLBL:
+                txt: 'уд'
+                size_hint_x: 0.1
+                theme_text_color: 'Secondary'
+            LBLBL:
+                txt: 'сл'
+                size_hint_x: 0.1 
+                theme_text_color: 'Secondary'
+            LBLBL:
+                txt: 'на'
+                size_hint_x: 0.1
+                theme_text_color: 'Secondary'
+            LBLBL:
+                txt: 'пр'
+                size_hint_x: 0.1 
+                theme_text_color: 'Secondary'
+            LBLBL:
+                txt: 'нн'
+                size_hint_x: 0.1 
+                theme_text_color: 'Secondary'
+            LBLBL:
+                txt: 'ис'
+                size_hint_x: 0.1 
+                theme_text_color: 'Secondary'
+            LBLBL:
+                txt: 'фо'
+                size_hint_x: 0.1 
+                theme_text_color: 'Secondary'
+            LBLBL:
+                txt: 'ОШ'
+                size_hint_x: 0.15 
+                theme_text_color: 'Secondary'
+            LBLBL:
+                txt: 'РЕ'
+                size_hint_x: 0.15
+
+
+        ScrollView:
+
+            do_scroll_x: False
+            bar_width: dp(5)
+            LB_Screen:
+                id: lb_screen
+
+        LB_Element:
+            bord: True
+            padding: dp(15), dp(9)
+            id: user_row
+            size_hint_y: None
+            height: dp(60)
+            canvas.before:
+                Color:
+                    rgba: app.theme_cls.primary_color
+                Line:
+                    width: dp(1)
+                    rectangle: (self.x, self.y, self.width, self.height)
+
+        MDBoxLayout:
+            padding: dp(5)
+            size_hint: 1, None
+            height: dp(60)
+            MDIconButton:
+                icon: "refresh"
+                pos_hint: {"right": 1, "bottom": 1}
+                on_release:
+                    root.upd_sc_fix()
+

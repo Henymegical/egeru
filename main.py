@@ -13,7 +13,7 @@ from kivy.properties import NumericProperty, BooleanProperty
 from kivy.storage.jsonstore import JsonStore
 from kivy.factory import Factory
 from kivy.core.window import Window
-#Window.size = (cfg.W, cfg.H)
+Window.size = (cfg.W, cfg.H)
 
 from kivymd.app import MDApp
 
@@ -50,7 +50,7 @@ class Myapp(MDApp):
 
         if self.store.exists('game_stats'):
             stats = self.store.get('game_stats')
-            self.best_udareniya    = stats.get('Udareniya', 0)
+            self.best_udareniya     = stats.get('Udareniya', 0)
             self.best_slovarniye    = stats.get('Slovarniye', 0)
             self.best_narechiya     = stats.get('Narechiya', 0)
             self.best_prepri        = stats.get('Prepri', 0)
@@ -73,6 +73,8 @@ class Myapp(MDApp):
             
     def on_start(self):
         self.switch_active = self._initial_switch
+        lb = self.root.get_screen('Leaderboard')
+        lb.upd_sc_fix()
 
     def update_settings(self):
 
@@ -141,11 +143,12 @@ class Myapp(MDApp):
                                       "Optionsmenu",
                                       "Add_ud",
                                       "Add_sl_sl",
-                                        "Add_nar",
-                                        "Add_pre_pri",
-                                        "Add_n_nn",
-                                        "Add_iskl",
-                                        "Add_form",
+                                      "Add_nar",
+                                      "Add_pre_pri",
+                                      "Add_n_nn",
+                                      "Add_iskl",
+                                      "Add_form",
+                                      "Leaderboard"
                                       ]:
                 self.root.current = "Mainmenu"
             elif self.root.current in ["Udareniya",
@@ -154,7 +157,7 @@ class Myapp(MDApp):
                                         "Prepri", 
                                         "N_nn", 
                                         "Isklyucheniya", 
-                                        'Formi',
+                                        "Formi",
                                         "Ud", 
                                         "Sl", 
                                         "Na", 
@@ -208,7 +211,7 @@ class Myapp(MDApp):
         self.sm = self.root
         return self.root
 
-    def switch_screen(self, screen_name):
+    def switch_screen(self, screen_name, go=True):
         if not self.sm.has_screen(screen_name):
             try:
                 screen_class = getattr(Factory, screen_name)
@@ -217,8 +220,12 @@ class Myapp(MDApp):
             except Exception as e:
                 print(f"Ошибка при загрузке экрана {screen_name}: {e}")
                 return
-        self.sm.current = screen_name
+        if go:
+            self.sm.current = screen_name
 
-
+    def on_stop(self):
+        lb = self.root.get_screen('Leaderboard')
+        lb.upd_sc_fix()
+        
 if __name__ == '__main__':
     Myapp().run()   

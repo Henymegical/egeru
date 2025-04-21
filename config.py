@@ -2,7 +2,7 @@
 #Window.size = (633, 305)
 #Window.size = (305, 633)
 W = 374
-H = 827
+H = 800
 
 HP = 10
 LOWHP = 3
