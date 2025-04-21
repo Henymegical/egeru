@@ -7,7 +7,7 @@ import database_pars.isklyucheniya as isklyucheniya
 import database_pars.formi as formi
 import config as cfg
 
-
+from lblogic import on_app_stop
 from kivy.clock import Clock
 from kivy.properties import NumericProperty, BooleanProperty
 from kivy.storage.jsonstore import JsonStore
@@ -226,6 +226,7 @@ class Myapp(MDApp):
     def on_stop(self):
         lb = self.root.get_screen('Leaderboard')
         lb.upd_sc_fix()
+        on_app_stop()
         
 if __name__ == '__main__':
     Myapp().run()   
