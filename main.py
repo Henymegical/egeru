@@ -8,15 +8,6 @@ import database_pars.formi as formi
 import config as cfg
 
 
-from kivy.utils import platform
-
-if platform == 'android':
-    from android.permissions import request_permissions, Permission
-    request_permissions([
-        Permission.READ_EXTERNAL_STORAGE,
-        Permission.WRITE_EXTERNAL_STORAGE
-    ])
-from lblogic import on_app_stop
 from kivy.clock import Clock
 from kivy.properties import NumericProperty, BooleanProperty
 from kivy.storage.jsonstore import JsonStore
@@ -235,7 +226,6 @@ class Myapp(MDApp):
     def on_stop(self):
         lb = self.root.get_screen('Leaderboard')
         lb.upd_sc_fix()
-        on_app_stop()
         
 if __name__ == '__main__':
     Myapp().run()   

@@ -37,7 +37,7 @@ version = 0.2
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd==1.2.0,materialyoucolor,exceptiongroup,asyncgui,asynckivy,aiohappyeyeballs==2.6.1,aiohttp==3.11.18,aiosignal==1.3.2,attrs==25.3.0,frozenlist==1.6.0,multidict==6.4.3,propcache==0.3.1,yarl==1.20.0,pillow
+requirements = python3,kivy,kivymd==1.2.0,materialyoucolor,exceptiongroup,asyncgui,asynckivy,pillow
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -95,7 +95,7 @@ android.presplash_color = #FFFFFF
 
 # (list) Permissions
 # (See https://python-for-android.readthedocs.io/en/latest/buildoptions/#build-options-1 for all the supported syntaxes and properties)
-android.permissions = INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE, CHANGE_WIFI_STATE, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
+android.permissions = INTERNET, ACCESS_NETWORK_STATE
 
 
 # (list) features (adds uses-feature -tags to manifest)
