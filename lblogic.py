@@ -151,39 +151,22 @@ class Leaderboard(MDScreen):
 
     def check_user(self):
         store = JsonStore(STORE_PATH)
-        if not store.exists('user'):
-            self.show_nickname_dialog()
-            return
-
-        local_user = store.get('user')
-
-        def on_success(req, res):
-            user_exists = any(
-                u['id'] == local_user['id'] and u['username'] == local_user['username']
-                for u in res
+        def on_fetch(users):
+            user_exists = store.exists('user') and any(
+                u['id']==store.get('user')['id'] and u['username']==store.get('user')['username']
+                for u in users
             )
-            if user_exists:
-                self.update_user_and_board()
-            else:
-                store.delete('user')
+            if not user_exists:
+                if store.exists('user'):
+                    os.remove(STORE_PATH)
                 self.show_nickname_dialog()
+            else:
+                self.update_user_and_board()
 
-        def on_failure(req, result):
-            # Обработка ошибки при получении данных с сервера
+        def on_fail(err):
             self.show_nickname_dialog()
 
-        def on_error(req, error):
-            # Обработка ошибки соединения
-            self.show_nickname_dialog()
-
-        headers = {'Content-Type': 'application/json'}
-        UrlRequest(
-            API_URL,
-            on_success=on_success,
-            on_failure=on_failure,
-            on_error=on_error,
-            req_headers=headers
-        )
+        API.fetch_users(on_fetch, on_fail)
 
     def update_user_and_board(self):
         store = JsonStore(STORE_PATH)
@@ -205,6 +188,11 @@ class Leaderboard(MDScreen):
         self.dialog.open()
 
     def create_user(self):
+        if JsonStore(STORE_PATH).exists('user'):
+            self.nickname_field.error = True
+            self.nickname_field.helper_text = "Сетевая ошибка"
+            self.nickname_field.helper_text_mode = "on_error"
+            return
         self.nickname_field.error = False
         username = self.nickname_field.text.strip()
         if not username or len(username)>maxlen or any(
