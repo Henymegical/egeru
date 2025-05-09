@@ -75,6 +75,7 @@ class Myapp(MDApp):
         self.switch_active = self._initial_switch
         lb = self.root.get_screen('Leaderboard')
         lb.upd_sc_fix()
+        lb.upd_sc_fix()
 
     def update_settings(self):
 
@@ -225,6 +226,7 @@ class Myapp(MDApp):
 
     def on_stop(self):
         lb = self.root.get_screen('Leaderboard')
+        lb.upd_sc_fix()
         lb.upd_sc_fix()
         
 if __name__ == '__main__':

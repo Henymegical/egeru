@@ -493,7 +493,7 @@ ScreenManager:
                 valign: "bottom"
             CustomLabel:
                 font_size: dp(15)
-                text: "0.2 Beta"
+                text: "0.2.1 Beta"
                 halign: "right"
                 valign: "bottom"
 
@@ -766,14 +766,21 @@ ScreenManager:
         MDBoxLayout:
             orientation: "vertical"
             padding: self.width * 0.05, 0
+            MDBoxLayout:
+                size_hint: 1, None
+                height: dp(40)
+                AutoFontLabel:
+                    center_text: False
+                    padding: 0,0,0,dp(10)
+                    max_font_size: dp(30)
+                    text: root.result_text
             WordButtons:
                 id: word_buttons
+                padding: dp(5)
                 dataset: root.dataset
                 on_update_hud: root.update_hud(*args)
-            AutoFontLabel:
-                center_text: False
-                max_font_size: dp(30)
-                text: root.result_text
+            MDLabel:
+
         GameButton:
 
 <Slovarniye>:

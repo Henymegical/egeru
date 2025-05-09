@@ -118,7 +118,7 @@ class WordButtons(MDGridLayout):
         MDApp.get_running_app().update_game_stats("Udareniya", self.scr, error_inc, solved_inc)
 
         if self.hlth <= 0:
-            self.res = "Игра окончена, Перезапуск..."
+            self.res = f"Неверно - {self.wrd[1]}, Перезапуск..."
             self.dispatch('on_update_hud', self.scr, self.hlth, self.left, self.res)
             self.allow_interaction = False
             Clock.schedule_once(self.restart, 2)
@@ -257,7 +257,7 @@ class BaseGameScreen(MDScreen):
         app.update_game_stats(mode_name, self.scr, error_inc, solved_inc)
 
         if self.hlth <= 0:
-            self.res = "Игра окончена, Перезапуск..."
+            self.res = f"Неверно - {self.wrd[1]}, Перезапуск..."
             self.update_hud(self.scr, self.hlth, self.left, self.res, self.quest)
             self.allow_interaction = False
             Clock.schedule_once(self.restart, 2)

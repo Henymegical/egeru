@@ -141,7 +141,7 @@ class Leaderboard(MDScreen):
 
     def upd_sc_fix(self):
         self.update_screen()
-        Clock.schedule_once(lambda dt: self.update_screen(), 1.5)
+        Clock.schedule_once(lambda dt: self.update_screen(), 1.0)
 
     def on_pre_enter(self):
         if not self._asked:
@@ -164,7 +164,10 @@ class Leaderboard(MDScreen):
                 self.update_user_and_board()
 
         def on_fail(err):
-            self.show_nickname_dialog()
+            if store.exists('user'):
+                self.update_screen()
+            else:
+                self.show_nickname_dialog()
 
         API.fetch_users(on_fetch, on_fail)
 

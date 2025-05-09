@@ -33,7 +33,7 @@ class AutoFontLabel(MDLabel):
         high = self.max_font_size
         best_size = low
 
-        for _ in range(8):  
+        for _ in range(4):  
             mid = (low + high) / 2
             core_label = CoreLabel(
                 text=self.text,
